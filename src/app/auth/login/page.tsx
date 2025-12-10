@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function LoginPage() {
   useEffect(() => {
     setButtonDisabled(!(user.email.trim() && user.password.trim()));
   }, [user]);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] p-4">
@@ -96,15 +98,30 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Password</label>
-            <input
-              type="password"
-              value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-              placeholder="••••••••"
-              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all"
-            />
-          </div>
+      <label className="block text-xs font-medium text-gray-400 mb-1">
+        Password
+      </label>
+
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          value={user.password}
+          onChange={(e) =>
+            setUser({ ...user, password: e.target.value })
+          }
+          placeholder="••••••••"
+          className="w-full px-3 py-2 pr-10 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all"
+        />
+
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white "
+        >
+          {showPassword ? <Eye size={18}/> : <EyeOff size={18}/>}
+        </button>
+      </div>
+    </div>
 
           <div className="flex justify-end">
             <Link href="/auth/forgotpassword" className="text-xs text-blue-400 hover:text-blue-300">
